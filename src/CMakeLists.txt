@@ -76,3 +76,9 @@ SETUP_SAMPLE_START(HelloGL)
 	endif()
 SETUP_SAMPLE_END(HelloGL)
 
+
+SETUP_SAMPLE_START(HelloTriangle)
+	SET(SOURCE_FILES
+		HelloTriangle/HelloTriangle.cpp
+	)	
+SETUP_SAMPLE_END(HelloTriangle)

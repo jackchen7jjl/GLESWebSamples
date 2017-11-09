@@ -125,7 +125,9 @@ GLuint GLSampleBase::LoadShader(GLenum type, String shaderSrc)
 
 			glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
 
-			std::cout << "compilete shader error: " << infoLog << std::endl;
+			std::cout << "compile shader error: " << infoLog << std::endl;
+
+			free(infoLog);
 		}
 		return 0;
 	}
@@ -150,12 +152,28 @@ GLuint GLSampleBase::CompileShaders(String vertextShader, String fragmentShader)
 
 	glLinkProgram(program);
 
+	GLint linkResult = 0;
+
+	glGetProgramiv(program,GL_LINK_STATUS,&linkResult);
+
+	if (linkResult == GL_FALSE)
+	{
+		GLint infoLen = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLen);
+		if (infoLen > 1)
+		{
+			char *infoLog = (char*)malloc(sizeof(char) * infoLen);
+			glGetProgramInfoLog(program, infoLen, NULL, infoLog);
+			std::cout << "link program error: " << infoLog << std::endl;
+			free(infoLog);
+		}
+		glDeleteProgram(program);
+		return 0;
+	}
+
 	glDeleteShader(vertex_shader);
 
 	glDeleteShader(fragment_shader);
-
-	if (program == 0)
-		std::cout << "CompileShaders error" << std::endl;
 
 	return program;
 }
