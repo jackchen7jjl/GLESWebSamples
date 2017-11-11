@@ -82,3 +82,15 @@ SETUP_SAMPLE_START(HelloTriangle)
 		HelloTriangle/HelloTriangle.cpp
 	)	
 SETUP_SAMPLE_END(HelloTriangle)
+
+SETUP_SAMPLE_START(UniformsSample)
+	SET(SOURCE_FILES
+		UniformsSample/UniformsSample.cpp
+	)	
+SETUP_SAMPLE_END(UniformsSample)
+
+SETUP_SAMPLE_START(VertexAttributesSample)
+	SET(SOURCE_FILES
+		VertexAttributesSample/VertexAttributesSample.cpp
+	)	
+SETUP_SAMPLE_END(VertexAttributesSample)
