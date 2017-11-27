@@ -50,7 +50,37 @@ bool GLSampleBase::Init()
 		return false;
 #endif // !EMSCRIPTEN
 
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	//======================================check gl features===============================
+	GLint maxVertexAttribs, maxVertexUniforms, maxVarying;
+	GLint maxVertexTextureUnits, maxCombinedTextureUnits;
+	GLint maxTexureImageUnits,numCompressedTextureFormat;
+	GLint maxFragmentUniformVectors;
+
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
+	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxVertexUniforms);
+	glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVarying);
+	glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &maxVertexTextureUnits);
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxCombinedTextureUnits);
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTexureImageUnits);
+	glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numCompressedTextureFormat);
+	glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &maxFragmentUniformVectors);
+
+	GLint *textureFormats = new GLint[numCompressedTextureFormat];
+	glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, textureFormats);
+
+	std::cout << "GL_VERSION: " << glGetString(GL_VERSION) << std::endl;
+	
+	std::cout << "GL_MAX_VERTEX_ATTRIBS(8): " << maxVertexAttribs << std::endl;
+	std::cout << "GL_MAX_VERTEX_UNIFORM_VECTORS(128): " << maxVertexUniforms << std::endl;
+	std::cout << "GL_MAX_VARYING_VECTORS(8): " << maxVarying << std::endl;
+
+	std::cout << "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS(0): " << maxVertexTextureUnits << std::endl;
+	std::cout << "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS(8): " << maxCombinedTextureUnits << std::endl;
+
+	std::cout << "GL_MAX_TEXTURE_IMAGE_UNITS(8): " << maxTexureImageUnits << std::endl;
+	std::cout << "GL_NUM_COMPRESSED_TEXTURE_FORMATS: " << numCompressedTextureFormat << std::endl;
+
+	std::cout << "GL_MAX_FRAGMENT_UNIFORM_VECTORS: " << maxFragmentUniformVectors << std::endl;
 
 	return true;
 }

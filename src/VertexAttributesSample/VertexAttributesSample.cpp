@@ -1,4 +1,5 @@
 #include "GLSampleBase.h"
+#include <math.h>
 #include <iostream>
 
 static GLuint vertexBuffer;

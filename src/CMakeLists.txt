@@ -26,6 +26,10 @@ else()
 	find_library(GLEW_LIBRARY NAMES glew PATHS ${GLEW_LIBRARY_PATH}) 
 endif()
 
+include_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}/Engine
+)
+
 add_library(Common STATIC
 Common/GLSampleBase.cpp
 Common/GLSampleBase.h
@@ -94,3 +98,22 @@ SETUP_SAMPLE_START(VertexAttributesSample)
 		VertexAttributesSample/VertexAttributesSample.cpp
 	)	
 SETUP_SAMPLE_END(VertexAttributesSample)
+
+SETUP_SAMPLE_START(VertexShaderSample)
+	SET(SOURCE_FILES
+		VertexShaderSample/VertexShaderSample.cpp
+	)	
+SETUP_SAMPLE_END(VertexShaderSample)
+
+SETUP_SAMPLE_START(TextureSample)
+	SET(SOURCE_FILES
+		TextureSample/TextureSample.cpp
+	)	
+SETUP_SAMPLE_END(TextureSample)
+
+SETUP_SAMPLE_START(FragmentShaderSample)
+	SET(SOURCE_FILES
+		FragmentShaderSample/FragmentShaderSample.cpp
+	)	
+SETUP_SAMPLE_END(FragmentShaderSample)
+
