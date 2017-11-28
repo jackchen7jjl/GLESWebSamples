@@ -26,13 +26,14 @@ else()
 	find_library(GLEW_LIBRARY NAMES glew PATHS ${GLEW_LIBRARY_PATH}) 
 endif()
 
-include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/Engine
-)
-
 add_library(Common STATIC
 Common/GLSampleBase.cpp
 Common/GLSampleBase.h
+Common/esUtil.h
+Common/esUtil.c
+Common/esTransform.c
+Common/esShapes.c
+Common/esShader.c
 )
 
 set(Common_INCLUDE_DIR "Common/")
@@ -117,3 +118,8 @@ SETUP_SAMPLE_START(FragmentShaderSample)
 	)	
 SETUP_SAMPLE_END(FragmentShaderSample)
 
+SETUP_SAMPLE_START(CubeTextureSample)
+	SET(SOURCE_FILES
+		CubeTextureSample/CubeTextureSample.cpp
+	)	
+SETUP_SAMPLE_END(CubeTextureSample)
