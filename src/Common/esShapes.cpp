@@ -19,6 +19,7 @@
 #include "esUtil.h"
 #include <stdlib.h>
 #include <math.h>
+#include <memory.h>
 
 ///
 // Defines
@@ -62,16 +63,16 @@ int ESUTIL_API esGenSphere ( int numSlices, float radius, GLfloat **vertices, GL
 
    // Allocate memory for buffers
    if ( vertices != NULL )
-      *vertices = malloc ( sizeof(GLfloat) * 3 * numVertices );
+      *vertices = (GLfloat*)malloc ( sizeof(GLfloat) * 3 * numVertices );
    
    if ( normals != NULL )
-      *normals = malloc ( sizeof(GLfloat) * 3 * numVertices );
+      *normals = (GLfloat*)malloc ( sizeof(GLfloat) * 3 * numVertices );
 
    if ( texCoords != NULL )
-      *texCoords = malloc ( sizeof(GLfloat) * 2 * numVertices );
+      *texCoords = (GLfloat*)malloc ( sizeof(GLfloat) * 2 * numVertices );
 
    if ( indices != NULL )
-      *indices = malloc ( sizeof(GLushort) * numIndices );
+      *indices = (GLushort*)malloc ( sizeof(GLushort) * numIndices );
 
    for ( i = 0; i < numParallels + 1; i++ )
    {
@@ -231,7 +232,7 @@ int ESUTIL_API esGenCube ( float scale, GLfloat **vertices, GLfloat **normals,
    // Allocate memory for buffers
    if ( vertices != NULL )
    {
-      *vertices = malloc ( sizeof(GLfloat) * 3 * numVertices );
+      *vertices = (GLfloat*)malloc ( sizeof(GLfloat) * 3 * numVertices );
       memcpy( *vertices, cubeVerts, sizeof( cubeVerts ) );
       for ( i = 0; i < numVertices; i++ )
       {
@@ -241,13 +242,13 @@ int ESUTIL_API esGenCube ( float scale, GLfloat **vertices, GLfloat **normals,
 
    if ( normals != NULL )
    {
-      *normals = malloc ( sizeof(GLfloat) * 3 * numVertices );
+      *normals = (GLfloat*)malloc ( sizeof(GLfloat) * 3 * numVertices );
       memcpy( *normals, cubeNormals, sizeof( cubeNormals ) );
    }
 
    if ( texCoords != NULL )
    {
-      *texCoords = malloc ( sizeof(GLfloat) * 2 * numVertices );
+      *texCoords = (GLfloat*)malloc ( sizeof(GLfloat) * 2 * numVertices );
       memcpy( *texCoords, cubeTex, sizeof( cubeTex ) ) ;
    }
 
@@ -271,7 +272,7 @@ int ESUTIL_API esGenCube ( float scale, GLfloat **vertices, GLfloat **normals,
          20, 22, 21
       };
 
-      *indices = malloc ( sizeof(GLushort) * numIndices );
+      *indices = (GLushort*)malloc ( sizeof(GLushort) * numIndices );
       memcpy( *indices, cubeIndices, sizeof( cubeIndices ) );
    }
 

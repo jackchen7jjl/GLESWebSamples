@@ -87,6 +87,7 @@ bool GLSampleBase::Init()
 
 void GLSampleBase::MainLoop()
 {
+	_instance->_frameCnt++;
 	_instance->Render();
 
 	glfwSwapBuffers(_instance->_window);

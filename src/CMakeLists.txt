@@ -9,6 +9,9 @@ if(EMSCRIPTEN)
 	add_definitions(-DGLFW_INCLUDE_ES2)
 	SET(CMAKE_EXECUTABLE_SUFFIX ".html")	
 	#SET(CMAKE_CXX_FLAGS "-s WASM=1 -O2 --preload-file grass.bmp")	
+	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_PTHREADS=1")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s CMAKE_C_FLAGS=1")
 else()
 	add_definitions(-DGLEW_STATIC)
 	add_definitions(-DGLEW_NO_GLU)
@@ -30,10 +33,10 @@ add_library(Common STATIC
 Common/GLSampleBase.cpp
 Common/GLSampleBase.h
 Common/esUtil.h
-Common/esUtil.c
-Common/esTransform.c
-Common/esShapes.c
-Common/esShader.c
+Common/esUtil.cpp
+Common/esTransform.cpp
+Common/esShapes.cpp
+Common/esShader.cpp
 )
 
 set(Common_INCLUDE_DIR "Common/")
@@ -123,3 +126,9 @@ SETUP_SAMPLE_START(CubeTextureSample)
 		CubeTextureSample/CubeTextureSample.cpp
 	)	
 SETUP_SAMPLE_END(CubeTextureSample)
+
+SETUP_SAMPLE_START(StencilTestSample)
+	SET(SOURCE_FILES
+		StencilTestSample/StencilTestSample.cpp
+	)	
+SETUP_SAMPLE_END(StencilTestSample)
