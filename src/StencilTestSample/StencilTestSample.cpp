@@ -44,26 +44,26 @@ protected:
 
 		static GLfloat vVertices[] =
 		{
-			-0.75f, 0.25f, 0.50f, // Quad #0
-			-0.25f, 0.25f, 0.50f,
-			-0.25f, 0.75f, 0.50f,
-			-0.75f, 0.75f, 0.50f,
-			0.25f, 0.25f, 0.90f, // Quad #1
-			0.75f, 0.25f, 0.90f,
-			0.75f, 0.75f, 0.90f,
-			0.25f, 0.75f, 0.90f,
-			-0.75f, -0.75f, 0.50f, // Quad #2
-			-0.25f, -0.75f, 0.50f,
-			-0.25f, -0.25f, 0.50f,
-			-0.75f, -0.25f, 0.50f,
-			0.25f, -0.75f, 0.50f, // Quad #3
-			0.75f, -0.75f, 0.50f,
-			0.75f, -0.25f, 0.50f,
-			0.25f, -0.25f, 0.50f,
-			-1.00f, -1.00f, 0.00f, // Big Quad
-			1.00f, -1.00f, 0.00f,
-			1.00f, 1.00f, 0.00f,
-			-1.00f, 1.00f, 0.00f
+			-0.75f, 0.25f, 0.5f,1.0f, // Quad #0
+			-0.25f, 0.25f, 0.5f,1.0f,
+			-0.25f, 0.75f, 0.5f,1.0f,
+			-0.75f, 0.75f, 0.5f,1.0f,
+			0.25f, 0.25f, 0.90f,1.0f, // Quad #1
+			0.75f, 0.25f, 0.90f,1.0f,
+			0.75f, 0.75f, 0.90f,1.0f,
+			0.25f, 0.75f, 0.90f,1.0f,
+			-0.75f, -0.75f, 0.50f,1.0f, // Quad #2
+			-0.25f, -0.75f, 0.50f,1.0f,
+			-0.25f, -0.25f, 0.50f,1.0f,
+			-0.75f, -0.25f, 0.50f,1.0f,
+			0.25f, -0.75f, 0.50f, 1.0f,// Quad #3
+			0.75f, -0.75f, 0.50f,1.0f,
+			0.75f, -0.25f, 0.50f,1.0f,
+			0.25f, -0.25f, 0.50f,1.0f,
+			-1.00f, -1.00f, 0.00f,1.0f, // Big Quad
+			1.00f, -1.00f, 0.00f,1.0f,
+			1.00f, 1.00f, 0.00f,1.0f,
+			-1.00f, 1.00f, 0.00f,1.0f
 		};
 
 		static GLushort indicess[][6] =
@@ -98,31 +98,57 @@ protected:
 	void Render() override
 	{
 		glClearColor(1.0, 0.6, 0, 1.0);
-		glClearStencil(1);
-		glDepthMask(GL_TRUE);
-		glClearDepthf(1.0f);
+		glClearStencil(1);		
+		glClearDepth(0.8);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+
+		glStencilMask(255);
+
+		glDepthMask(GL_TRUE);		
+
+		glDepthFunc(GL_LESS);
 
 		glUseProgram(_program);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 		glEnableVertexAttribArray(positionLoc);
-		glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 12, (void*)0);
+		glVertexAttribPointer(positionLoc, 4, GL_FLOAT, GL_FALSE, 16, (void*)0);
 
-		glStencilFunc(GL_LESS, 0x7, 0x3);
+		glStencilFunc(GL_LESS, 0x7, 0x3);//stencil test fail,stencil buffer value = 7
 		glStencilOp(GL_REPLACE, GL_DECR, GL_DECR);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[0]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
-		glStencilFunc(GL_GREATER, 0x3, 0x3);
+		glStencilFunc(GL_GREATER, 0x3, 0x3);//stencil test pass,but depth test fail,sbv = 0
 		glStencilOp(GL_KEEP, GL_DECR, GL_KEEP);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[1]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
-		glStencilFunc(GL_EQUAL, 0x1, 0x3);
+		glStencilFunc(GL_EQUAL, 0x1, 0x3);//all pass,sbv = 2
 		glStencilOp(GL_KEEP, GL_INCR, GL_INCR);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[2]);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+		glStencilFunc(GL_EQUAL, 0x2, 0x1);//stencil test fail,sbv = 254
+		glStencilOp(GL_INVERT, GL_KEEP, GL_KEEP);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[3]);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+		int numStencilBits = 0;
+		glGetIntegerv(GL_STENCIL_BITS, &numStencilBits);
+
+		//std::cout << "NumStencilBits: " << numStencilBits << std::endl;
+		glStencilMask(0);//donot write sbv
+
+		glStencilFunc(GL_EQUAL, 0x3, 0x7);//fail sbv = 7
+		glStencilOp(GL_INCR, GL_DECR, GL_DECR);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[0]);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+		glStencilFunc(GL_EQUAL, 0x8, 0x3);//fail sbv = 7
+		glStencilOp(GL_INCR, GL_DECR, GL_DECR);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffers[0]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 	}
 
