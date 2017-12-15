@@ -12,6 +12,11 @@ if(EMSCRIPTEN)
 	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_PTHREADS=1")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1")
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s CMAKE_C_FLAGS=1")
+	
+	add_definitions(
+	-DGLFW_INCLUDE_ES2
+	)
+	
 else()
 	add_definitions(-DGLEW_STATIC)
 	add_definitions(-DGLEW_NO_GLU)
@@ -19,10 +24,8 @@ else()
 	find_package(OpenGL)
 
 	set(OPEN_SOURCE_DIR "E:/opensource/")
-	set(GLFW_INCLUDE_DIR "${OPEN_SOURCE_DIR}glfw/include" CACHE PATH "glfw include dir")
 	set(GLEW_INCLUDE_DIR "${OPEN_SOURCE_DIR}glew/glew_110_include" CACHE PATH "glew include dir")
 
-	set(GLFW_LIBRARY_PATH "${OPEN_SOURCE_DIR}glfw/lib/Win32/Debug/" CACHE PATH "glfw lib path")
 	set(GLEW_LIBRARY_PATH "${OPEN_SOURCE_DIR}glew/glew_110_lib/Win32/Debug/" CACHE PATH "glew lib path")
 
 	find_library(GLFW_LIBRARY NAMES glfw3 PATHS ${GLFW_LIBRARY_PATH})
@@ -37,13 +40,22 @@ Common/esUtil.cpp
 Common/esTransform.cpp
 Common/esShapes.cpp
 Common/esShader.cpp
+Common/FastByteArray.h
+Common/FastByteArray.cpp
 )
 
+add_subdirectory(glfw)
+
+include_directories(
+	glfw/include/GLFW/
+	glew/include/
+)
+	
 set(Common_INCLUDE_DIR "Common/")
 
 if(NOT EMSCRIPTEN)
-	target_include_directories(Common PRIVATE ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
-	target_link_libraries(Common ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${OPENGL_gl_LIBRARY})
+	target_include_directories(Common PRIVATE ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+	target_link_libraries(Common glfw ${GLFW_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif()
 
 MACRO(SETUP_SAMPLE_START EXE_NAME)
@@ -132,3 +144,9 @@ SETUP_SAMPLE_START(StencilTestSample)
 		StencilTestSample/StencilTestSample.cpp
 	)	
 SETUP_SAMPLE_END(StencilTestSample)
+
+SETUP_SAMPLE_START(ReadPixelsSample)
+	SET(SOURCE_FILES
+		ReadPixelsSample/ReadPixelsSample.cpp
+	)	
+SETUP_SAMPLE_END(ReadPixelsSample)

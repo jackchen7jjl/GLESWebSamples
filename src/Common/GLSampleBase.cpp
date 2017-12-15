@@ -128,7 +128,7 @@ GLuint GLSampleBase::LoadShader(GLenum type, String shaderSrc)
 	#ifdef EMSCRIPTEN
 		shaderSrc = "#version 100\n" + shaderSrc;
 	#else
-		shaderSrc = "#version 110\n" + shaderSrc;
+		shaderSrc = "#version 120\n" + shaderSrc;
 	#endif // EMSCRIPTEN
 
 	const char* cstr = shaderSrc.c_str();
@@ -216,6 +216,7 @@ void GLSampleBase::ErrorCallback(int error, const char* description)
 
 void GLSampleBase::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	_instance->KeyHandler(window,key,scancode,action,mods);
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, 1);
 }

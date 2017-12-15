@@ -20,28 +20,55 @@ static GLint  positionLoc;
 
 static GLint vTexCoordLoc;
 
-static GLuint textureId = 0;
+static GLuint textureIds[3];
 
-GLubyte pixels[4 * 4] =
-{
-	255, 0, 0,255, // Red
-	0, 255, 0,255, // Green
-	0, 0, 255,255, // Blue
-	255, 255, 0,255 // Yellow
-};
+GLubyte *pixels = nullptr;
+
+GLubyte *pixels2 = nullptr;
 
 static GLint textureSampleLoc;
 static GLint offsetLoc;
 
 void CreateTexture()
 {
-	int textureWidth = 2;
-	int textureHeight = 2;
+	int textureWidth = 8;
+	int textureHeight = 8;
+
+	pixels = new GLubyte[textureWidth * textureWidth * 4];
+
+	int index = 0;
+	for (int i = 0; i < textureWidth; i++)
+	{
+		for (int j = 0; j < textureHeight; j++)
+		{
+			pixels[index++] = ((double)i / (double)textureWidth) * 255;
+			pixels[index++] = 0;
+			pixels[index++] = 0;
+			pixels[index++] = 255;
+		}
+	}
+
+	int textureWidth2 = 1024;
+	int textureHeight2 = 1024;
+
+	pixels2 = new GLubyte[1024 * 1024 * 4];
+	index = 0;
+	for (int i = 0; i < 1024; i++)
+	{
+		for (int j = 0; j < 1024; j++)
+		{
+			pixels2[index++] = 0;
+			pixels2[index++] = ((double)i / (double)textureWidth) * 255;
+			pixels2[index++] = 0;
+			pixels2[index++] = 255;
+		}
+	}
 
 	glPixelStorei(GL_PACK_ALIGNMENT,1);
 
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glGenTextures(3, textureIds);
+	glBindTexture(GL_TEXTURE_2D, textureIds[1]);
+	glBindTexture(GL_TEXTURE_2D, textureIds[2]);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -115,13 +142,24 @@ protected:
 		CreateTexture();
 	}
 
+	void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		if (key == GLFW_KEY_1 && action == GLFW_RELEASE)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels2);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else if (key == GLFW_KEY_2 && action == GLFW_RELEASE)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+	}
+
 	void Render() override
 	{
 		glClearColor(1.0, 0.6, 0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		if (textureId == 0)
-			return;
 
 		glUseProgram(_program);
 
@@ -131,8 +169,8 @@ protected:
 		mvp[4] = -sin(rotZ);
 		mvp[5] = cos(rotZ);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureId);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, textureIds[1]);
 		glUniform1i(textureSampleLoc,0);
 
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, (const GLfloat*)mvp);

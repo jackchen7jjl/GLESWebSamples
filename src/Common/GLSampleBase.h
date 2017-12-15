@@ -28,6 +28,8 @@ protected:
 	virtual void Render() = 0;
 	virtual void EndUp() = 0;
 
+	virtual void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods) {};
+
 	GLFWwindow *_window;
 	String _vertexShaderSource;
 	String _fragmentShaderSource;
