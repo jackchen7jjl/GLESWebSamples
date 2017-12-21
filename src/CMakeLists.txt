@@ -9,9 +9,6 @@ if(EMSCRIPTEN)
 	add_definitions(-DGLFW_INCLUDE_ES2)
 	SET(CMAKE_EXECUTABLE_SUFFIX ".html")	
 	#SET(CMAKE_CXX_FLAGS "-s WASM=1 -O2 --preload-file grass.bmp")	
-	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_PTHREADS=1")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1")
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s CMAKE_C_FLAGS=1")
 	
 	add_definitions(
 	-DGLFW_INCLUDE_ES2
@@ -28,8 +25,15 @@ else()
 
 	set(GLEW_LIBRARY_PATH "${OPEN_SOURCE_DIR}glew/glew_110_lib/Win32/Debug/" CACHE PATH "glew lib path")
 
-	find_library(GLFW_LIBRARY NAMES glfw3 PATHS ${GLFW_LIBRARY_PATH})
 	find_library(GLEW_LIBRARY NAMES glew PATHS ${GLEW_LIBRARY_PATH}) 
+	
+	add_subdirectory(glfw)
+
+	include_directories(
+		glfw/include/GLFW/
+		glew/include/
+)
+
 endif()
 
 add_library(Common STATIC
@@ -42,13 +46,6 @@ Common/esShapes.cpp
 Common/esShader.cpp
 Common/FastByteArray.h
 Common/FastByteArray.cpp
-)
-
-add_subdirectory(glfw)
-
-include_directories(
-	glfw/include/GLFW/
-	glew/include/
 )
 	
 set(Common_INCLUDE_DIR "Common/")
@@ -150,3 +147,9 @@ SETUP_SAMPLE_START(ReadPixelsSample)
 		ReadPixelsSample/ReadPixelsSample.cpp
 	)	
 SETUP_SAMPLE_END(ReadPixelsSample)
+
+SETUP_SAMPLE_START(PerformanceSample)
+	SET(SOURCE_FILES
+		PerformanceSample/PerformanceSample.cpp
+	)	
+SETUP_SAMPLE_END(PerformanceSample)

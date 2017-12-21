@@ -99,7 +99,7 @@ protected:
 	{
 		glClearColor(1.0, 0.6, 0, 1.0);
 		glClearStencil(1);		
-		glClearDepth(0.8);
+		glClearDepthf(0.8);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
 		glStencilMask(255);

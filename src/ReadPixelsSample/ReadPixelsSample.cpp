@@ -115,7 +115,7 @@ protected:
 		CreateTexture();
 	}
 
-	void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods) 
+	void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods) override
 	{
 		if (key == GLFW_KEY_1 && action == GLFW_RELEASE)
 		{
