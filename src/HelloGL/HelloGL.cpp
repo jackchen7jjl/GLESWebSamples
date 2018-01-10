@@ -56,7 +56,7 @@ GLuint CreateSimpleTexture2D()
 	GLubyte *pixels = (GLubyte *)readRGBFile("HelloGL/grass.bmp");
 
 	// Use tightly packed data
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	// Generate a texture object
 	glGenTextures(1, &textureId);
@@ -66,9 +66,10 @@ GLuint CreateSimpleTexture2D()
 
 	// Load the texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// Set the filtering mode
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	return textureId;

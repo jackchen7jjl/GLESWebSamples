@@ -56,9 +56,11 @@ protected:
 
 		static FastByteArray vVertices(3 * 4 * 4);
 
+		float zValue = 0.5;
+
 		vVertices.WriteFloat(0.0f);
 		vVertices.WriteFloat(0.5f);
-		vVertices.WriteFloat(0.0f);
+		vVertices.WriteFloat(zValue);
 		vVertices.WriteByte(1);
 		vVertices.WriteByte(2);
 		vVertices.WriteByte(1);
@@ -66,7 +68,7 @@ protected:
 
 		vVertices.WriteFloat(-0.5f);
 		vVertices.WriteFloat(-0.5f);
-		vVertices.WriteFloat(0.0f);
+		vVertices.WriteFloat(zValue);
 		vVertices.WriteByte(3);
 		vVertices.WriteByte(4);
 		vVertices.WriteByte(3);
@@ -74,7 +76,7 @@ protected:
 
 		vVertices.WriteFloat(0.5f);
 		vVertices.WriteFloat(-0.5f);
-		vVertices.WriteFloat(0.0f);
+		vVertices.WriteFloat(zValue);
 		vVertices.WriteByte(0);
 		vVertices.WriteByte(2);
 		vVertices.WriteByte(1);
@@ -84,12 +86,23 @@ protected:
 		glGenBuffers(1, &vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, vVertices.GetDataLen(), vVertices.GetData(), GL_STATIC_DRAW);
+
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void Render() override
 	{
+		int width, height;
+		glfwGetWindowSize(_window, &width, &height);
+
+		glViewport(0, 0, width, height);
 		glClearColor(1.0, 0.6, 0, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		glClearDepthf(0.8);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		
+
+		glDepthMask(GL_TRUE);
+		glDepthFunc(GL_LESS);
 
 		glUseProgram(_program);
 

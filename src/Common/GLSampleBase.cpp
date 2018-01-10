@@ -24,9 +24,18 @@ bool GLSampleBase::Init()
 		return false;
 	}
 
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+ 	const GLFWvidmode *vidmode = glfwGetVideoMode(monitor);
+	
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_AUTO_ICONIFY,false);
+
+	//glfwWindowHint(GLFW_RED_BITS, vidmode->redBits);
+	//glfwWindowHint(GLFW_GREEN_BITS, vidmode->greenBits);
+	//glfwWindowHint(GLFW_BLUE_BITS, vidmode->blueBits);
+	//glfwWindowHint(GLFW_REFRESH_RATE, vidmode->refreshRate);
 
 	_window = glfwCreateWindow(1024, 768, "Hello GLFW", NULL, NULL);
 
@@ -68,6 +77,8 @@ bool GLSampleBase::Init()
 	GLint *textureFormats = new GLint[numCompressedTextureFormat];
 	glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, textureFormats);
 
+	//std::cout << "GLFW VERSION: " << GLFW_VERSION_MAJOR << "." << GLFW_VERSION_MINOR << "." << GLFW_VERSION_REVISION << std::endl;
+	std::cout << "GLFW VERSION: " << glfwGetVersionString() << std::endl;
 	std::cout << "GL_VERSION: " << glGetString(GL_VERSION) << std::endl;
 	
 	std::cout << "GL_MAX_VERTEX_ATTRIBS(8): " << maxVertexAttribs << std::endl;
@@ -82,6 +93,50 @@ bool GLSampleBase::Init()
 
 	std::cout << "GL_MAX_FRAGMENT_UNIFORM_VECTORS: " << maxFragmentUniformVectors << std::endl;
 
+	
+	int count = 0;
+	const GLFWvidmode *vidmodes = glfwGetVideoModes(monitor, &count);
+	std::cout << "vidmodes: " << count << std::endl;
+
+	//for (int i = 0; i < count; i++)
+	//{		
+	//	std::cout 
+	//		<< "redBits="<< vidmodes[i].redBits 
+	//		<< ", greenBits=" << vidmodes[i].greenBits 
+	//		<< ", blueBits=" << vidmodes[i].blueBits 
+	//		<< ", width=" << vidmodes[i].width 
+	//		<< ", height=" << vidmodes[i].height 
+	//		<< ", refreshRate=" << vidmodes[i].refreshRate << std::endl;
+	//	
+	//}
+
+	/*int monitorCnt;
+	GLFWmonitor **monitors = glfwGetMonitors(&monitorCnt);
+	for (int i = 0; i < monitorCnt; i++)
+	{
+		GLFWmonitor *moni = monitors[i];		
+		std::cout << "monitor" << i << " ---------:"  << std::endl;
+		int pw, ph;
+		glfwGetMonitorPhysicalSize(moni, &pw, &ph);
+
+		int posX, posY;
+		glfwGetMonitorPos(moni,&posX,&posY);
+
+		const GLFWvidmode *vidmode = glfwGetVideoMode(moni);
+		std::cout
+			<< "name=" << glfwGetMonitorName(moni)
+			<< ",PhysicalWidth=" << pw
+			<< ",PhysicalHeight=" << ph
+			<< ",MonitorPosX=" << posX
+			<< ",MonitorPosY=" << posY
+			<< ",redBits=" << vidmode->redBits
+			<< ", greenBits=" << vidmode->greenBits
+			<< ", blueBits=" << vidmode->blueBits
+			<< ", width=" << vidmode->width
+			<< ", height=" << vidmode->height
+			<< ", refreshRate=" << vidmode->refreshRate << std::endl;
+	}*/
+	 
 	return true;
 }
 
@@ -219,4 +274,8 @@ void GLSampleBase::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	_instance->KeyHandler(window,key,scancode,action,mods);
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, 1);
+	else if (key == GLFW_KEY_SPACE)
+		glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, 640, 480, 60);
+	else if (key == GLFW_KEY_1)
+		glfwSetWindowSize(window, 1600, 800);
 }

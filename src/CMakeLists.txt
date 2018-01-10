@@ -31,7 +31,6 @@ else()
 
 	include_directories(
 		glfw/include/GLFW/
-		glew/include/
 )
 
 endif()
@@ -77,8 +76,8 @@ MACRO(SETUP_SAMPLE_END EXE_NAME)
 		target_include_directories(${EXE_NAME} PRIVATE ${Common_INCLUDE_DIR})	
 		target_link_libraries(${EXE_NAME} Common)
 	else()
-		target_include_directories(${EXE_NAME} PRIVATE ${Common_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})	
-		target_link_libraries(${EXE_NAME} Common ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${OPENGL_gl_LIBRARY})
+		target_include_directories(${EXE_NAME} PRIVATE ${Common_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})	
+		target_link_libraries(${EXE_NAME} Common glfw ${GLEW_LIBRARY} ${OPENGL_gl_LIBRARY})
 	endif()
 
 ENDMACRO(SETUP_SAMPLE_END)
