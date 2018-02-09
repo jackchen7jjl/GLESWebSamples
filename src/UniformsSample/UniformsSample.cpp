@@ -166,6 +166,23 @@ protected:
 	{
 		glDeleteProgram(_program);
 	}
+
+	void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods) override
+	{
+		if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+		{
+			_window2 = glfwCreateWindow(800, 600, "Hello GLFW2", NULL, _window);
+			glfwMakeContextCurrent(_window2);   // Must be done before init of GLEW for this new windows Context!
+			GLenum err = glewInit();
+			if (err != GLEW_OK)
+			{
+				// a problem occured when trying to init glew, report it:
+				printf("GLEW Error occured, Description: %s\n", glewGetErrorString(err));
+				glfwDestroyWindow(_window2);
+			}
+			glfwMakeContextCurrent(_window);
+		}
+	}
 };
 
 DECLARE_MAIN(UniformsSample)

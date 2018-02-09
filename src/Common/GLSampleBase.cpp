@@ -142,11 +142,23 @@ bool GLSampleBase::Init()
 
 void GLSampleBase::MainLoop()
 {
+	glfwMakeContextCurrent(_instance->_window);
+
 	_instance->_frameCnt++;
 	_instance->Render();
 
 	glfwSwapBuffers(_instance->_window);
 	glfwPollEvents();
+
+	if (_instance->_window2 != nullptr)
+	{
+		glfwMakeContextCurrent(_instance->_window2);
+		
+		_instance->Render();
+
+		glfwSwapBuffers(_instance->_window2);
+		glfwPollEvents();		
+	}
 }
 
 void GLSampleBase::Run()
@@ -277,5 +289,5 @@ void GLSampleBase::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	else if (key == GLFW_KEY_SPACE)
 		glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, 640, 480, 60);
 	else if (key == GLFW_KEY_1)
-		glfwSetWindowSize(window, 1600, 800);
+		glfwSetWindowSize(window, 1600, 800);	
 }

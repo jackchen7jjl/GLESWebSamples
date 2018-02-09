@@ -152,3 +152,9 @@ SETUP_SAMPLE_START(PerformanceSample)
 		PerformanceSample/PerformanceSample.cpp
 	)	
 SETUP_SAMPLE_END(PerformanceSample)
+
+SETUP_SAMPLE_START(FBOSample)
+	SET(SOURCE_FILES
+		FBOSample/FBOSample.cpp
+	)	
+SETUP_SAMPLE_END(FBOSample)

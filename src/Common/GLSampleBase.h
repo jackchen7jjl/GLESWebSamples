@@ -30,7 +30,8 @@ protected:
 
 	virtual void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods) {};
 
-	GLFWwindow *_window;
+	GLFWwindow *_window = nullptr;
+	GLFWwindow *_window2 = nullptr;
 	String _vertexShaderSource;
 	String _fragmentShaderSource;
 
